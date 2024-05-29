@@ -1,0 +1,28 @@
+from pyrogram import Client
+import os, sqlite3
+from dotenv import load_dotenv
+load_dotenv()
+
+api_id = os.getenv("APP_ID")
+api_hash = os.getenv("API_HASH")
+bot_token = os.getenv("BOT_TOKEN")
+
+app = Client(
+    "my_bot",
+    api_id=api_id, api_hash=api_hash,
+    bot_token=bot_token
+)
+
+conn = sqlite3.connect('bot/database/eventbuddy_db.sqlite')
+c = conn.cursor()
+
+c.execute('''CREATE TABLE IF NOT EXISTS eventbuddy (
+    chat_id TEXT PRIMARY KEY,
+    transcript TEXT,
+    last_message_timestamp DATETIME
+)''')
+
+conn.commit()
+
+
+app.run()
