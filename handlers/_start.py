@@ -28,6 +28,8 @@ async def _start(app, message):
         BotCommand("start", "Start the bot"),
         BotCommand("reset", "Reset the bot"),
         BotCommand("about", "About the bot")
+        BotCommand("create_wallet", "Create a wallet")
+
     ]
     await app.set_bot_commands(
         commands,

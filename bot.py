@@ -11,6 +11,8 @@ app = Client("my_bot")
 from handlers._start import _start
 from handlers._about import _about
 from handlers._reset import _reset
+from handlers._create_wallet import _create_wallet
+
 from respond import respond
 
 
