@@ -7,14 +7,15 @@ SUI_WALLET_API_URL = "http://127.0.0.1:5000/create_wallet"
 
 
 async def _create_wallet(app, message):
-    await message.reply_photo("https://i.ibb.co/61gGT66/1-S-KRFq4-400x400.png")
-    await message.reply_text("👋 I'm EventBuddy, your AI ...")
+    
+    await message.reply_text("CREATING WALLET")
+    
     response = requests.post(SUI_WALLET_API_URL)
     if response.status_code == 200:
         wallet_data = response.json()
-        message.reply_text(f"Wallet created successfully!\nAddress: {wallet_data['address']}\nSeed Phrase: {wallet_data['seed_phrase']}")
+        await message.reply_text(f"Wallet created successfully!\nAddress: {wallet_data['address']}\nSeed Phrase: {wallet_data['seed_phrase']}")
     else:
-        message.reply_text('Failed to create wallet. Please try again later.')
+        await message.reply_text('Failed to create wallet. Please try again later.')
 
 
 #def get_nft(update: Update, context: CallbackContext) -> None:

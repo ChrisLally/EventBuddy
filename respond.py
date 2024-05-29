@@ -24,4 +24,4 @@ async def respond(message):
     t_sqlite3.setTranscript(message.chat.id,json.dumps(message_history))
 
     print('got response_text, now replying...')
-    await message.reply_text(response+" HISTORY:"+json.dumps(message_history))
+    await message.reply_text(response)
