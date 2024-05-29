@@ -2,3 +2,6 @@ google-service-account-key.json
 .env
 __pycache__
 my_bot.session
+/bot/database
+eventbuddy_db.sqlite
+bot/database/eventbuddy_db.sqlite
