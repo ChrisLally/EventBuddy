@@ -1,9 +1,3 @@
-# from typing import Dict, List, Union
-
-# from google.cloud import aiplatform
-# from google.protobuf import json_format
-# from google.protobuf.struct_pb2 import Value
-
 import os, vertexai
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="google-service-account-key.json"
 
@@ -58,8 +52,6 @@ def generate_prediction(
     )
     print(response.text)
     return response.text
-
-
 
 def generateResponse(prompt,message_history):
     response=generate_prediction(
