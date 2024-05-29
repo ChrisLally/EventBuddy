@@ -26,6 +26,10 @@ async def about_handler(app, message):
 async def reset_handler(app, message):
     await _reset(app, message)
 
+@app.on_message(filters.command("create_wallet") & filters.private)
+async def create_wallet_handler(app, message):
+    await _create_wallet(app, message)
+
 @app.on_message(filters.text & filters.private)
 async def respond_handler(app,message):
     await respond(message)
