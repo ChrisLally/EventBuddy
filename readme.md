@@ -1,6 +1,6 @@
 <div align="center">
 
-  # Universal telegram bot intelegence solution
+  # Universal text to telegram bot intelegence solutions
   
   **Python Telegram bot powered by Google's `gemini` LLM API**
 
