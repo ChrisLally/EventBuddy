@@ -12,7 +12,7 @@ from handlers._start import _start
 from handlers._about import _about
 from handlers._reset import _reset
 from handlers._create_wallet import _create_wallet
-from handlers._creaet_stellar_wallet import _create_stellar_wallet
+
 from respond import respond
 
 
@@ -28,13 +28,12 @@ async def about_handler(app, message):
 async def reset_handler(app, message):
     await _reset(app, message)
 
+
 @app.on_message(filters.command("create_wallet") & filters.private)
 async def create_wallet_handler(app, message):
     await _create_wallet(app, message)
 
-@app.on_message(filters.command("create_wallet") & filters.private)
-async def create_wallet_handler(app, message):
-    await _create_stellar_wallet(app, message)
+
 
 @app.on_message(filters.text & filters.private)
 async def respond_handler(app,message):

@@ -1,23 +1,25 @@
-from cryptography.hazmat.primitives.asymmetric import ed25519
-from cryptography.hazmat.primitives import serialization
-import base58
-from flask import Flask, jsonify
-from cryptography.hazmat.primitives.asymmetric import ed25519
-from cryptography.hazmat.primitives import serialization
-import base58
-
+from stellar_sdk import Keypair
 from sui_python_sdk.wallet import SuiWallet
-from sui_python_sdk.provider import SuiJsonRpcProvider
-from sui_python_sdk.rpc_tx_data_serializer import RpcTxDataSerializer
-from sui_python_sdk.signer_with_provider import SignerWithProvider
-from sui_python_sdk.models import TransferObjectTransaction,TransferSuiTransaction,MoveCallTransaction
-
-from bech32 import bech32_encode, convertbits
-
-
 import bech32
-from typing import Dict, Tuple, Any
-from coincurve import PrivateKey
+from pyrogram.types import (
+    InlineKeyboardButton,
+    InlineKeyboardMarkup
+)
+from pyrogram.helpers import array_chunk
+
+
+
+
+def generate_stellar_wallet():
+    keypair = Keypair.random()
+    address = keypair.public_key
+    secret = keypair.secret
+    print(address,secret)
+    return {
+        "address": address,
+        "seed_phrase": secret
+    }
+
 
 SUI_PRIVATE_KEY_PREFIX = 'suiprivkey'
 SIGNATURE_FLAG_TO_SCHEME = {
@@ -50,18 +52,13 @@ def encode_sui_private_key(bytes: bytes, scheme: str) -> str:
     words = bech32.convertbits(priv_key_bytes, 8, 5, True)
     return bech32.bech32_encode(SUI_PRIVATE_KEY_PREFIX, words)
 
-
-
-app = Flask(__name__)
-
-
 def generate_sui_wallet():
     random_wallet = SuiWallet.create_random_wallet()
     print(random_wallet.get_address())
     print(random_wallet.full_private_key)
     parsed_keypair = ParsedKeypair('ed25519',random_wallet.private_key)
     encoded_key = encode_sui_private_key(parsed_keypair.secret_key, parsed_keypair.schema)
-    print(encoded_key)
+    print("encoded_key",encoded_key)
     decoded_keypair = decode_sui_private_key(encoded_key)
     print(decoded_keypair)
     return {
@@ -71,11 +68,41 @@ def generate_sui_wallet():
 
 
 
+
+async def select_option(app, message, prompt, options):
+    chat_id=message.chat.id
+    # Create a list of InlineKeyboardButtons first 
+    buttons = [InlineKeyboardButton(opt, callback_data=f"CALLBACK?") for opt in options]
+
+    # Then create a 2x2 grid using array_chunk
+    button_rows = array_chunk(buttons, 2)  
+    keyboard = InlineKeyboardMarkup(button_rows)
+
+    await app.send_message(chat_id, f"{prompt}", reply_markup=keyboard)
+    
 async def _create_wallet(app, message):
+    wallets={
+        'Sui':generate_sui_wallet(),
+        'Stellar':generate_stellar_wallet()
+    }
+    await message.reply_text(wallets)
     
-    await message.reply_text("CREATING WALLET")
+    # selected_wallet = await select_option(app, message, "Which blockchain?", {'Sui', 'Stellar'})
+    # print('selected_wallet IS: ',selected_wallet)
     
-    wallet_data = generate_sui_wallet()
-    await message.reply_text(f"Wallet created successfully!\nAddress: {wallet_data['address']}\nSeed Phrase: {wallet_data['seed_phrase']}")
-
-
+    # #await message.reply_text(f"Creating {selected_wallet} wallet!")
+    # if selected_wallet == 'Sui':
+    #     wallet=generate_sui_wallet()
+    # elif selected_wallet == 'Stellar':
+    #     wallet=generate_stellar_wallet()
+    
+    # reply_message = f"{selected_wallet} wallet created! \n Address: {wallet['address']} \n Private Key: {wallet['private_key']}"
+    
+    # await message.reply_text(reply_message)
+    
+# @app.on_callback_query()
+# async def handle_callback_query(client, callback_query):
+#     if callback_query.data == "option_1":
+#         await callback_query.message.edit_text("You selected Option 1")
+#     elif callback_query.data == "option_2":
+#         await callback_query.message.edit_text("You selected Option 2")
