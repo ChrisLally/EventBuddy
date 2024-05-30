@@ -21,9 +21,14 @@ def new_chat(context: ContextTypes.DEFAULT_TYPE):
     with open('all_you_need_to_say.txt', 'r', encoding='utf-8') as file:
         text = file.read()
 
+    with open('SuiDocs.txt', 'r', encoding='utf-8') as file:
+        text2 = file.read()
+
     # Clean the text by replacing newlines with spaces and stripping leading/trailing spaces
     clean_text = ' '.join(text.split())
 
+    prompt = 'You are a event buddy - a hackthon bot that helps people find events happening at the event and also help developers hacking on SUI to tackle their coding issues.'
+    final_text=prompt+" event data: "+clean_text+" Sui docs:"+text2
     # Initialize a new chat using the cleaned text
     context.chat_data["chat"] = model.start_chat(history=[
         {
@@ -32,8 +37,9 @@ def new_chat(context: ContextTypes.DEFAULT_TYPE):
         },
         {
             'role': 'model',
-            'parts': ['Sure.']  # Model's response
-        },
+            'parts': ['thanks for the events.']  # Model's response
+        }
+        
     ])
 import asyncio
 
