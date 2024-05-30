@@ -13,7 +13,7 @@ def createTable():
     sui_address TEXT,
     sui_privatekey TEXT,
     stellar_address TEXT,
-    stellar_privatekey
+    stellar_privatekey TEXT
     )'''
     )
 

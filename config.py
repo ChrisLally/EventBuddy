@@ -19,9 +19,12 @@ conn = sqlite3.connect('bot/database/eventbuddy_db.sqlite')
 c = conn.cursor()
 
 c.execute('''CREATE TABLE IF NOT EXISTS eventbuddy (
-    address TEXT PRIMARY KEY,
+    user_id TEXT PRIMARY KEY,
     transcript TEXT,
-    privatekey TEXT,
+    sui_address TEXT,
+    sui_privatekey TEXT,
+    stellar_address TEXT,
+    stellar_privatekey TEXT,
     last_message_timestamp DATETIME
 )''')
 
