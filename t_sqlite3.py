@@ -33,30 +33,30 @@ def setTranscript(user_id, new_transcript):
     bot_db_conn.commit()
 
 def setSuiWallet(user_id, address,privatekey):
-    if type(new_transcript) is list:
-        new_transcript = json.dumps(new_transcript)
-    else:
-        print("NEW TRANSCRIPT TYPE",type(new_transcript))
+    # if type(new_transcript) is list:
+    #     new_transcript = json.dumps(new_transcript)
+    # else:
+    #     print("NEW TRANSCRIPT TYPE",type(new_transcript))
         
     bot_db_conn = sqlite3.connect(f'bot/database/{bot_db_name}_db.sqlite')
     bot_db_c = bot_db_conn.cursor()
     bot_db_c.execute(f"""
         INSERT OR REPLACE INTO {bot_db_name} (user_id,sui_address, sui_privatekey)
-        VALUES (?, ?)
+        VALUES (?, ?, ?)
     """, (user_id,address, privatekey))
     bot_db_conn.commit()
 
 def setStellarPrivateKey(user_id, address,privatekey):
-    if type(new_transcript) is list:
-        new_transcript = json.dumps(new_transcript)
-    else:
-        print("NEW TRANSCRIPT TYPE",type(new_transcript))
+    # if type(new_transcript) is list:
+    #     new_transcript = json.dumps(new_transcript)
+    # else:
+    #     print("NEW TRANSCRIPT TYPE",type(new_transcript))
         
     bot_db_conn = sqlite3.connect(f'bot/database/{bot_db_name}_db.sqlite')
     bot_db_c = bot_db_conn.cursor()
     bot_db_c.execute(f"""
         INSERT OR REPLACE INTO {bot_db_name} (user_id, stellar_address,stellar_privatekey)
-        VALUES (?, ?)
+        VALUES (?, ?, ?)
     """, (user_id,address, privatekey))
     bot_db_conn.commit()
 

@@ -159,8 +159,8 @@ async def create_sui_wallet(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Non
     #    wallet=generate_stellar_wallet()
     
     reply_message = f"Sui wallet created! \n Address: {wallet['address']} \n Private Key: {wallet['private_key']}"
-    print(wallet[1])
-    t_sqlite3.setSuiWallet(user_id,wallet[0],wallet[1])
+    print(wallet)
+    t_sqlite3.setSuiWallet(user_id,wallet["address"],wallet["private_key"])
     
     await update.message.reply_text(reply_message)
    
@@ -178,8 +178,8 @@ async def create_stellar_wallet(update: Update, _: ContextTypes.DEFAULT_TYPE) ->
     #    wallet=generate_stellar_wallet()
     
     reply_message = f"Stellar wallet created! \n Address: {wallet['address']} \n Private Key: {wallet['private_key']}"
-    print(wallet[1])
-    t_sqlite3.setStellarPrivateKey(user_id,wallet[0],wallet[1])
+    print(wallet)
+    t_sqlite3.setStellarPrivateKey(user_id,wallet["address"],wallet["private_key"])
     
     await update.message.reply_text(reply_message)
 
