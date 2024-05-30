@@ -1,8 +1,8 @@
 <div align="center">
 
-  # Event Buddy
+  # Universal telegram bot intelegence solution
   
-  **An Event-based Python Telegram bot powered by Google's `gemini-pro` LLM API**
+  **Python Telegram bot powered by Google's `gemini` LLM API**
 
   *This is our tg bot*
 
@@ -14,19 +14,12 @@
 
 ### Requirements
 
-* Python 3.10+
+* Python 3.9+
 * Telegram Bot API token
 * Google `gemini-pro` API key
 * dotenv (for environment variables)
 
 
-### Docker
-
-
-### Contributing
-
-
-### Disclaimer
 
 This bot is still under development...
 
