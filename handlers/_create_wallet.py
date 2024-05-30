@@ -68,11 +68,10 @@ def generate_sui_wallet():
 
 
 
-
 async def select_option(app, message, prompt, options):
     chat_id=message.chat.id
     # Create a list of InlineKeyboardButtons first 
-    buttons = [InlineKeyboardButton(opt, callback_data=f"CALLBACK?") for opt in options]
+    buttons = [InlineKeyboardButton(opt, callback_data=f"option_{opt}?") for opt in options]
 
     # Then create a 2x2 grid using array_chunk
     button_rows = array_chunk(buttons, 2)  
@@ -81,14 +80,9 @@ async def select_option(app, message, prompt, options):
     await app.send_message(chat_id, f"{prompt}", reply_markup=keyboard)
     
 async def _create_wallet(app, message):
-    wallets={
-        'Sui':generate_sui_wallet(),
-        'Stellar':generate_stellar_wallet()
-    }
-    await message.reply_text(wallets)
     
-    # selected_wallet = await select_option(app, message, "Which blockchain?", {'Sui', 'Stellar'})
-    # print('selected_wallet IS: ',selected_wallet)
+    selected_wallet = await select_option(app, message, "Which blockchain?", {'Sui', 'Stellar'})
+    print('selected_wallet IS: ',selected_wallet)
     
     # #await message.reply_text(f"Creating {selected_wallet} wallet!")
     # if selected_wallet == 'Sui':
@@ -100,9 +94,4 @@ async def _create_wallet(app, message):
     
     # await message.reply_text(reply_message)
     
-# @app.on_callback_query()
-# async def handle_callback_query(client, callback_query):
-#     if callback_query.data == "option_1":
-#         await callback_query.message.edit_text("You selected Option 1")
-#     elif callback_query.data == "option_2":
-#         await callback_query.message.edit_text("You selected Option 2")
+   

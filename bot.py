@@ -15,6 +15,12 @@ from handlers._create_wallet import _create_wallet
 
 from respond import respond
 
+@app.on_callback_query()
+async def handle_callback_query(client, callback_query):
+    if callback_query.data == "option_1":
+        await callback_query.message.edit_text("You selected Option 1 Sui")
+    elif callback_query.data == "option_2":
+        await callback_query.message.edit_text("You selected Option 2 Stellar")
 
 @app.on_message(filters.command("start") & filters.private)
 async def start_handler(app, message):
