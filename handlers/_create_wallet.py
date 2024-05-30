@@ -80,9 +80,10 @@ async def select_option(app, message, prompt, options):
     await app.send_message(chat_id, f"{prompt}", reply_markup=keyboard)
     
 async def _create_wallet(app, message):
-    
     selected_wallet = await select_option(app, message, "Which blockchain?", {'Sui', 'Stellar'})
-    print('selected_wallet IS: ',selected_wallet)
+    print('selected_wallet IS: ', selected_wallet)
+
+
     
     # #await message.reply_text(f"Creating {selected_wallet} wallet!")
     # if selected_wallet == 'Sui':
