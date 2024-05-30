@@ -1,4 +1,5 @@
-import ai_prediction, t_sqlite3, json
+#import ai_prediction, 
+import t_sqlite3, json
 
 async def respond(message):
     await message.reply_text("got your message...")
@@ -24,4 +25,4 @@ async def respond(message):
     t_sqlite3.setTranscript(message.chat.id,json.dumps(message_history))
 
     print('got response_text, now replying...')
-    await message.reply_text(response+" HISTORY:"+json.dumps(message_history))
+    await message.reply_text(response)

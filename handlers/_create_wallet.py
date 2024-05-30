@@ -1,27 +1,44 @@
 import requests
 from dotenv import load_dotenv
 load_dotenv()
+from cryptography.hazmat.primitives.asymmetric import ed25519
+from cryptography.hazmat.primitives import serialization
+import base58
 
-#sui_wallet_api_url=os.getenv("SUI_WALLET_URL")
-SUI_WALLET_API_URL = "http://127.0.0.1:5000/create_wallet"
-
+def generate_sui_wallet():
+    # Generate a new Ed25519 private key
+    private_key = ed25519.Ed25519PrivateKey.generate()
+    
+    # Get the public key
+    public_key = private_key.public_key()
+    
+    # Serialize keys
+    private_key_bytes = private_key.private_bytes(
+        encoding=serialization.Encoding.Raw,
+        format=serialization.PrivateFormat.Raw,
+        encryption_algorithm=serialization.NoEncryption()
+    )
+    public_key_bytes = public_key.public_bytes(
+        encoding=serialization.Encoding.Raw,
+        format=serialization.PublicFormat.Raw
+    )
+    
+    # Encode the public key in base58 for the wallet address
+    address = base58.b58encode(public_key_bytes).decode('utf-8')
+    
+    # Convert private key to seed phrase (this is a simplified example, normally you'd use a BIP39 library)
+    seed_phrase = base58.b58encode(private_key_bytes).decode('utf-8')
+    
+    return {
+        "address": address,
+        "seed_phrase": seed_phrase
+    }
 
 async def _create_wallet(app, message):
-    await message.reply_photo("https://i.ibb.co/61gGT66/1-S-KRFq4-400x400.png")
-    await message.reply_text("👋 I'm EventBuddy, your AI ...")
-    response = requests.post(SUI_WALLET_API_URL)
-    if response.status_code == 200:
-        wallet_data = response.json()
-        message.reply_text(f"Wallet created successfully!\nAddress: {wallet_data['address']}\nSeed Phrase: {wallet_data['seed_phrase']}")
-    else:
-        message.reply_text('Failed to create wallet. Please try again later.')
-
-
-#def get_nft(update: Update, context: CallbackContext) -> None:
-#def give_rating(update: Update, context: CallbackContext) -> None:
-#
-#def get_airdrop(update: Update, context: CallbackContext) -> None:
-#def buy_tickets(update: Update, context: CallbackContext) -> None:
-
+    
+    await message.reply_text("CREATING WALLET")
+    
+    wallet_data = generate_sui_wallet()
+    await message.reply_text(f"Wallet created successfully!\nAddress: {wallet_data['address']}\nSeed Phrase: {wallet_data['seed_phrase']}")
 
 
