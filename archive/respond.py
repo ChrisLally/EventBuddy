@@ -11,7 +11,7 @@ async def respond(message):
         message_history=[{"is_user":True,"message":"/start"},{"is_user":False,"message": _start.start_message}]
         print("transcript_old is None, but got from _start", message_history)
         
-    response="got your message..."
+    response="my response!"
     #response=ai_prediction.generateResponse(message.text,message_history)
     message_history.append({
         "is_user":True,
