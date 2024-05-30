@@ -1,38 +1,75 @@
-import requests
-from dotenv import load_dotenv
-load_dotenv()
+from cryptography.hazmat.primitives.asymmetric import ed25519
+from cryptography.hazmat.primitives import serialization
+import base58
+from flask import Flask, jsonify
 from cryptography.hazmat.primitives.asymmetric import ed25519
 from cryptography.hazmat.primitives import serialization
 import base58
 
+from sui_python_sdk.wallet import SuiWallet
+from sui_python_sdk.provider import SuiJsonRpcProvider
+from sui_python_sdk.rpc_tx_data_serializer import RpcTxDataSerializer
+from sui_python_sdk.signer_with_provider import SignerWithProvider
+from sui_python_sdk.models import TransferObjectTransaction,TransferSuiTransaction,MoveCallTransaction
+
+from bech32 import bech32_encode, convertbits
+
+
+import bech32
+from typing import Dict, Tuple, Any
+from coincurve import PrivateKey
+
+SUI_PRIVATE_KEY_PREFIX = 'suiprivkey'
+SIGNATURE_FLAG_TO_SCHEME = {
+    0x00: 'ed25519',
+    # Add other signature schemes if needed
+}
+SIGNATURE_SCHEME_TO_FLAG = {v: k for k, v in SIGNATURE_FLAG_TO_SCHEME.items()}
+PRIVATE_KEY_SIZE = 32
+
+class ParsedKeypair:
+    def __init__(self, schema: str, secret_key: bytes):
+        self.schema = schema
+        self.secret_key = secret_key
+
+def decode_sui_private_key(value: str) -> ParsedKeypair:
+    prefix, words = bech32.bech32_decode(value)
+    if prefix != SUI_PRIVATE_KEY_PREFIX:
+        raise ValueError('invalid private key prefix')
+    extended_secret_key = bech32.convertbits(words, 5, 8, False)
+    extended_secret_key = bytearray(extended_secret_key)
+    secret_key = bytes(extended_secret_key[1:])
+    signature_scheme = SIGNATURE_FLAG_TO_SCHEME[extended_secret_key[0]]
+    return ParsedKeypair(signature_scheme, secret_key)
+
+def encode_sui_private_key(bytes: bytes, scheme: str) -> str:
+    if len(bytes) != PRIVATE_KEY_SIZE:
+        raise ValueError('Invalid bytes length')
+    flag = SIGNATURE_SCHEME_TO_FLAG[scheme]
+    priv_key_bytes = bytearray([flag]) + bytes
+    words = bech32.convertbits(priv_key_bytes, 8, 5, True)
+    return bech32.bech32_encode(SUI_PRIVATE_KEY_PREFIX, words)
+
+
+
+app = Flask(__name__)
+
+
 def generate_sui_wallet():
-    # Generate a new Ed25519 private key
-    private_key = ed25519.Ed25519PrivateKey.generate()
-    
-    # Get the public key
-    public_key = private_key.public_key()
-    
-    # Serialize keys
-    private_key_bytes = private_key.private_bytes(
-        encoding=serialization.Encoding.Raw,
-        format=serialization.PrivateFormat.Raw,
-        encryption_algorithm=serialization.NoEncryption()
-    )
-    public_key_bytes = public_key.public_bytes(
-        encoding=serialization.Encoding.Raw,
-        format=serialization.PublicFormat.Raw
-    )
-    
-    # Encode the public key in base58 for the wallet address
-    address = base58.b58encode(public_key_bytes).decode('utf-8')
-    
-    # Convert private key to seed phrase (this is a simplified example, normally you'd use a BIP39 library)
-    seed_phrase = base58.b58encode(private_key_bytes).decode('utf-8')
-    
+    random_wallet = SuiWallet.create_random_wallet()
+    print(random_wallet.get_address())
+    print(random_wallet.full_private_key)
+    parsed_keypair = ParsedKeypair('ed25519',random_wallet.private_key)
+    encoded_key = encode_sui_private_key(parsed_keypair.secret_key, parsed_keypair.schema)
+    print(encoded_key)
+    decoded_keypair = decode_sui_private_key(encoded_key)
+    print(decoded_keypair)
     return {
-        "address": address,
-        "seed_phrase": seed_phrase
+        "address": random_wallet.get_address(),
+        "private_key":encoded_key
     }
+
+
 
 async def _create_wallet(app, message):
     
