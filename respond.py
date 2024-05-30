@@ -1,4 +1,5 @@
-import ai_prediction, t_sqlite3, json
+#import ai_prediction, 
+import t_sqlite3, json
 
 async def respond(message):
     await message.reply_text("got your message...")
