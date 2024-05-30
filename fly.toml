@@ -1,0 +1,20 @@
+app = "geminiprobot"
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[build]
+image = "ghcr.io/rabilrbl/gemini-pro-bot:latest"
+
+[env]
+
+[experimental]
+  auto_rollback = true
+
+[[services]]
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+[deploy]
+  strategy = "immediate"

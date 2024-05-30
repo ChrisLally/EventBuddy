@@ -12,7 +12,8 @@ start_message="""
 START MESSAGE
 """
 
-async def send_question(app, chat_id, question_num, question_text, options):
+async def send_question(app, message, question_num, question_text, options):
+    chat_id=message.chat.id
     # Create a list of InlineKeyboardButtons first 
     buttons = [InlineKeyboardButton(opt, callback_data=f"q{question_num}_{opt}") for opt in options]
 
@@ -21,13 +22,17 @@ async def send_question(app, chat_id, question_num, question_text, options):
     keyboard = InlineKeyboardMarkup(button_rows)
 
     await app.send_message(chat_id, f"Question {question_num}:\n{question_text}", reply_markup=keyboard)
+    
+
 
 async def _start(app, message):
     print("/start called...")
     commands = [
         BotCommand("start", "Start the bot"),
         BotCommand("reset", "Reset the bot"),
-        BotCommand("about", "About the bot")
+        BotCommand("about", "About the bot"),
+        BotCommand("create_wallet", "Create a wallet")
+
     ]
     await app.set_bot_commands(
         commands,

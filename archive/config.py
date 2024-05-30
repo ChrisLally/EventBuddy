@@ -3,14 +3,16 @@ import os, sqlite3
 from dotenv import load_dotenv
 load_dotenv()
 
-api_id = os.getenv("APP_ID")
-api_hash = os.getenv("API_HASH")
+#api_id = os.getenv("APP_ID")
+#api_hash = os.getenv("API_HASH")
 bot_token = os.getenv("BOT_TOKEN")
+#sui_wallet_api_url=os.getenv("SUI_WALLET_URL")
 
 app = Client(
     "my_bot",
-    api_id=api_id, api_hash=api_hash,
+   # api_id=api_id, api_hash=api_hash,
     bot_token=bot_token
+    #sui_wallet_api_url=sui_wallet_api_url
 )
 
 conn = sqlite3.connect('bot/database/eventbuddy_db.sqlite')
