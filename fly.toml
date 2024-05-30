@@ -1,5 +1,3 @@
-# fly.toml file generated for tgbotderbl on 2023-03-02T03:21:23Z
-
 app = "geminiprobot"
 kill_signal = "SIGINT"
 kill_timeout = 5
