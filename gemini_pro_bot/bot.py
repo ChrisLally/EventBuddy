@@ -13,6 +13,8 @@ from gemini_pro_bot.handlers import (
     newchat_command,
     handle_message,
     handle_image,
+    create_sui_wallet,
+    create_stellar_wallet
 )
 
 load_dotenv()
@@ -27,6 +29,11 @@ def start_bot() -> None:
     application.add_handler(CommandHandler("start", start, filters=AuthFilter))
     application.add_handler(CommandHandler("help", help_command, filters=AuthFilter))
     application.add_handler(CommandHandler("new", newchat_command, filters=AuthFilter))
+    application.add_handler(CommandHandler("create_sui_wallet", create_sui_wallet, filters=AuthFilter))
+    application.add_handler(CommandHandler("create_stellar_wallet", create_stellar_wallet, filters=AuthFilter))
+
+
+
 
     # Any text message is sent to LLM to generate a response
     application.add_handler(MessageHandler(MessageFilter, handle_message))
