@@ -14,7 +14,13 @@ from gemini_pro_bot.handlers import (
     handle_message,
     handle_image,
     create_sui_wallet,
-    create_stellar_wallet
+    create_stellar_wallet,
+    register_cartesi,
+    rate_1,
+    rate_2,
+    rate_3,
+    rate_4,
+    rate_5
 )
 
 load_dotenv()
@@ -32,7 +38,12 @@ def start_bot() -> None:
     application.add_handler(CommandHandler("create_sui_wallet", create_sui_wallet, filters=AuthFilter))
     application.add_handler(CommandHandler("create_stellar_wallet", create_stellar_wallet, filters=AuthFilter))
 
-
+    application.add_handler(CommandHandler("register_cartesi", register_cartesi, filters=AuthFilter))
+    application.add_handler(CommandHandler("rate_1", rate_1, filters=AuthFilter))
+    application.add_handler(CommandHandler("rate_2", rate_2, filters=AuthFilter))
+    application.add_handler(CommandHandler("rate_3", rate_3, filters=AuthFilter))
+    application.add_handler(CommandHandler("rate_4", rate_4, filters=AuthFilter))
+    application.add_handler(CommandHandler("rate_5", rate_5, filters=AuthFilter))
 
 
     # Any text message is sent to LLM to generate a response

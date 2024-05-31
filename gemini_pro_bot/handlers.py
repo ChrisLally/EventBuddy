@@ -121,10 +121,10 @@ def new_chat(context: ContextTypes.DEFAULT_TYPE):
     - Locaiton: X
     - Link: X
     
-    YOU WILL NOT RESPOND WITH RAW JSON
+    YOU WILL NOT RESPOND WITH RAW JSON - RESPOND WITH A MAX OF 3 RELEVENT EVENTS:
     """
     
-    context_final=prompt+" event data: "+clean_text+" Sui documentation:"+text2+" So, are you ready to help me?"
+    context_final=prompt+clean_text+" | and here is theSui documentation:"+text2+" So, are you ready to help me?"
 
     # Initialize a new chat using the cleaned text
     context.chat_data["chat"] = model.start_chat(
@@ -135,7 +135,7 @@ def new_chat(context: ContextTypes.DEFAULT_TYPE):
         },
         {
             'role': 'model',
-            'parts': ['Yes, how can I help?']  # Model's response
+            'parts': ['Yes, ask away!']  # Model's response
         },
     ])
 
@@ -157,6 +157,8 @@ async def start(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
 Ask about any events happening today, or try /create_sui_wallet or /create_stellar_wallet to generate your new wallet.
     
 This new wallet will enable you to make verifiable ratings of the events you attend, and will mint your rating as an NFT!
+
+Hacking this week? I know the Sui docs by heart, ask away!
     """
     
     #user_id = update.message.from_user.id
@@ -184,6 +186,35 @@ This new wallet will enable you to make verifiable ratings of the events you att
     #     "https://i.ibb.co/61gGT66/1-S-KRFq4-400x400.png"
     # )
     #await update.message.reply_text("👋 I'm EventBuddy, your AI ...")
+
+
+
+rate_text="Rate this event out of 5! \n/rate_1\n/rate_2\n/rate_3\n/rate_4\n/rate_5"
+
+async def register_cartesi(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    
+    reply_message = f"https://testnet.suivision.xyz/object/0x0f548bdd9e6779b1f2a611a4587038ccf034c4e993d25c03389d80f83a6f1a95\nSaturday, June 1 10:00 AM - 5:00 PM @ 2930 E 12th St Austin, Texas\n\nYou are registered for Builder Demo Days hosted by Cartesi!\nAgenda:\n- 11:00 - 12:00 Guests arrive, mingling & networking\n- 12:00 - 12:30 Lunch will be available\n- 12:30 - 1:30 Opening Speeches from the Hosts\n- 1:30 - 4:00 Pitch Competition\n- 4:00 - 5:00 Open Networking\n- 5:00 Event Ends\n\nEach team will have 10 minutes to pitch and 5 minutes for Q&A from the audience!\n\nYou will get your NFT in your SUI wallet soon!\n"+rate_text
+    
+    await update.message.reply_text(reply_message)
+async def rate_1(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 1/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_2(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 2/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_3(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 3/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_4(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 4/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_5(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"https://testnet.suivision.xyz/object/0x8061c50c0de95bc55d8b0dd18827c7259885d495c1e438a4d4ddf5dba79b4305\nYou have rated Builder Demo Days a 5/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
 
 
 
