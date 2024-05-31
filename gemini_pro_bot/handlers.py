@@ -22,9 +22,10 @@ from pyrogram.types import (
 )
 from pyrogram.helpers import array_chunk
 import asyncio
-import asyncio
 from datetime import datetime
 import t_sqlite3
+import time
+import pytz
 
 
 def generate_stellar_wallet():
@@ -98,31 +99,67 @@ def new_chat(context: ContextTypes.DEFAULT_TYPE):
     with open('all_you_need_to_say.txt', 'r', encoding='utf-8') as file:
         text = file.read()
 
+    with open('SuiDocs.txt', 'r', encoding='utf-8') as file:
+        text2 = file.read()
     # Clean the text by replacing newlines with spaces and stripping leading/trailing spaces
     clean_text = ' '.join(text.split())
 
+    prompt = """
+    You are EventBuddy, a friendly and informative event planning assistant. 
+    Your purpose is to help users plan and organize events, from small gatherings to large-scale conferences. 
+    You can provide suggestions for venues, activities, catering, and more. 
+    You are always eager to assist and ensure that every event is a success.
+    
+    You will respond in this format for events that START on or after the date/time right now:
+    * Event Title: X
+    - Date & Time: X
+    - Locaiton: X
+    - Link: X
+    (if continued...)
+    * Event Title: X
+    - Date & Time: X
+    - Locaiton: X
+    - Link: X
+    
+    YOU WILL NOT RESPOND WITH RAW JSON
+    """
+    
+    context_final=prompt+" event data: "+clean_text+" Sui documentation:"+text2+" So, are you ready to help me?"
+
     # Initialize a new chat using the cleaned text
-    context.chat_data["chat"] = model.start_chat(history=[
+    context.chat_data["chat"] = model.start_chat(
+    history=[
         {
             'role': 'user',
-            'parts': [clean_text]  # Use the cleaned text here
+            'parts': [context_final]  # Use the cleaned text here
         },
         {
             'role': 'model',
-            'parts': ['Sure.']  # Model's response
+            'parts': ['Yes, how can I help?']  # Model's response
         },
     ])
-import asyncio
 
 
 import asyncio
+
 from datetime import datetime
 
 async def start(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    print("START TRIGGERED")
+    
     """Send a message when the command /start is issued."""
     user = update.effective_user
-    message = f"Hi {user.mention_html()}!\n\nStart sending messages with me to generate a response.\n\nSend /new to start a new chat session."
-    user_id = update.message.from_user.id
+     
+
+    #message = f"Hi {user.mention_html()}!\n\nStart sending messages with me to generate a response.\n\nSend /new to start a new chat session."
+    message="""Hello, I'm EventBuddy, your friendly and informative event planning assistant for Consensus 2024! (more to come)
+    
+Ask about any events happening today, or try /create_sui_wallet or /create_stellar_wallet to generate your new wallet.
+    
+This new wallet will enable you to make verifiable ratings of the events you attend, and will mint your rating as an NFT!
+    """
+    
+    #user_id = update.message.from_user.id
     # Get the current date and time
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -131,22 +168,22 @@ async def start(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
         log_file.write(f"{now} - User {user.id} - {user.username} started the chat.\n")
 
     # Send the greeting message to the user
-    await update.message.reply_html(
-        message,
-        # reply_markup=ForceReply(selective=True),
-    )
-    if_exists = t_sqlite3.getTranscript(user_id)
-    if if_exists==None:
-        print('transcript does not exist, creating')
-        t_sqlite3.setTranscript(user_id,[{"is_user":True,"message":"/start"},{"is_user":False,"message":message}])
-    else:
-        print("transcript already exists")
-    await update.message.reply_photo("https://i.ibb.co/61gGT66/1-S-KRFq4-400x400.png")
+    # await update.message.reply_html(
+    #     message,
+    #     # reply_markup=ForceReply(selective=True),
+    # )
+    #if_exists = t_sqlite3.getTranscript(user_id)
+    # if if_exists==None:
+    #     print('transcript does not exist, creating')
+    #     t_sqlite3.setTranscript(user_id,[{"is_user":True,"message":"/start"},{"is_user":False,"message":message}])
+    # else:
+    #     print("transcript already exists")
+    await update.message.reply_photo("https://i.postimg.cc/prLD22rQ/photo-2024-05-30-00-49-10.jpg")
     await update.message.reply_text(message)
-    await update.message.reply_photo(
-        "https://i.ibb.co/61gGT66/1-S-KRFq4-400x400.png"
-    )
-    await update.message.reply_text("👋 I'm EventBuddy, your AI ...")
+    # await update.message.reply_photo(
+    #     "https://i.ibb.co/61gGT66/1-S-KRFq4-400x400.png"
+    # )
+    #await update.message.reply_text("👋 I'm EventBuddy, your AI ...")
 
 
 
@@ -165,7 +202,7 @@ async def create_sui_wallet(update: Update, _: ContextTypes.DEFAULT_TYPE) -> Non
     
     reply_message = f"Sui wallet created! \n Address: {wallet['address']} \n Private Key: {wallet['private_key']}"
     print(wallet)
-    t_sqlite3.setSuiWallet(user_id,wallet["address"],wallet["private_key"])
+    #t_sqlite3.setSuiWallet(user_id,wallet["address"],wallet["private_key"])
     
     await update.message.reply_text(reply_message)
    
@@ -234,6 +271,8 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     if context.chat_data.get("chat") is None:
         new_chat(context)
     text = update.message.text
+      
+    
     init_msg = await update.message.reply_text(
         text="Generating...", reply_to_message_id=update.message.message_id
     )
