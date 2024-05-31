@@ -187,6 +187,35 @@ This new wallet will enable you to make verifiable ratings of the events you att
 
 
 
+rate_text="Rate this event out of 5! \n/rate_1\n/rate_2\n/rate_3\n/rate_4\n/rate_5"
+
+async def register_cartesi(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    
+    reply_message = f"Saturday, June 1 10:00 AM - 5:00 PM @ 2930 E 12th St Austin, Texas\n\nYou are registered for Builder Demo Days hosted by Cartesi!\nAgenda:\n- 11:00 - 12:00 Guests arrive, mingling & networking\n- 12:00 - 12:30 Lunch will be available\n- 12:30 - 1:30 Opening Speeches from the Hosts\n- 1:30 - 4:00 Pitch Competition\n- 4:00 - 5:00 Open Networking\n- 5:00 Event Ends\n\nEach team will have 10 minutes to pitch and 5 minutes for Q&A from the audience!\n\nYou will get your NFT in your SUI wallet soon!\n"+rate_text
+    
+    await update.message.reply_text(reply_message)
+async def rate_1(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 1/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_2(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 2/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_3(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 3/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_4(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 4/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+async def rate_5(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
+    reply_message = f"You have rated Builder Demo Days a 5/5 - change your rating up to 24h after the event!\n"+rate_text
+    await update.message.reply_text(reply_message)
+
+
+
 async def create_sui_wallet(update: Update, _: ContextTypes.DEFAULT_TYPE) -> None:
     #selected_wallet = await select_option(app, message, "Which blockchain?", {'Sui', 'Stellar'})
     #print('selected_wallet IS: ', selected_wallet)
