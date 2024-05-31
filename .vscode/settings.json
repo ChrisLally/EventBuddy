@@ -1,3 +1,4 @@
 {
-    "IDX.aI.enableCodebaseIndexing": true
+    "IDX.aI.enableCodebaseIndexing": true,
+    "IDX.aI.enableInlineCompletion": true
 }
