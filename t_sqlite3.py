@@ -60,26 +60,26 @@ def setStellarPrivateKey(user_id, address,privatekey):
     """, (user_id,address, privatekey))
     bot_db_conn.commit()
 
-def resetChat(user_id):
-    print('resetting chat',user_id)
+# def resetChat(user_id):
+#     print('resetting chat',user_id)
 
-    setTranscript(user_id,None)
+#     setTranscript(user_id,None)
 
-def getTranscript(user_id):
-    bot_db_conn = sqlite3.connect(f'bot/database/{bot_db_name}_db.sqlite')
-    bot_db_c = bot_db_conn.cursor()
-    doc = bot_db_c.execute(f"SELECT * FROM {bot_db_name} WHERE user_id=?",(user_id,)).fetchone()
-    if doc is None:
-        print('no doc, returning None',user_id)
-        return None
+# def getTranscript(user_id):
+#     bot_db_conn = sqlite3.connect(f'bot/database/{bot_db_name}_db.sqlite')
+#     bot_db_c = bot_db_conn.cursor()
+#     doc = bot_db_c.execute(f"SELECT * FROM {bot_db_name} WHERE user_id=?",(user_id,)).fetchone()
+#     if doc is None:
+#         print('no doc, returning None',user_id)
+#         return None
         
-    #print('full doc',doc)
-    #print('doc1',doc[1])
-    if doc[1] is None:
-        print('no transcript, returning None',user_id)
-        return None
-    else:
-        return json.loads(doc[1])
+#     #print('full doc',doc)
+#     #print('doc1',doc[1])
+#     if doc[1] is None:
+#         print('no transcript, returning None',user_id)
+#         return None
+#     else:
+#         return json.loads(doc[1])
     
 def getSuiWallet(user_id):
     bot_db_conn = sqlite3.connect(f'bot/database/{bot_db_name}_db.sqlite')
